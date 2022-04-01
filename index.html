@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+		.looser {
+			display: none;
+			width: 300px;
+			height: 200px;
+			background: gray;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+			padding-top: 50px;
+		}
+		.font {
+			font-family: arial;
+		}
+	</style>
+</head>
+<body>
+	<h1 class="font">Очки: <span class="count">0</span></h1>
+	<h1 class="font">У тебя 9 секунд, чтобы успеть собрать все шарики</h1>
+	<h1 class="looser font">Looser! У тебя мало очков</h1>
+</body>
+	<script type="text/javascript">
+		let cfRed = 100
+		let cfYellow = 100
+		let cfOrange = 100
+		let count = 0
+		function getRandomIntInclusive(min, max) {
+  			min = Math.ceil(min);
+  			max = Math.floor(max);
+  			return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+		}
+		let createCircle = function (left,top) {
+			let circle = document.createElement("div")
+			document.body.appendChild(circle)
+			circle.className = "circle"
+			circle.style.background = "red"
+			circle.style.width = "100px"
+			circle.style.height = "100px"
+			circle.style.borderRadius = "50%"
+			circle.style.position = "absolute"
+			circle.style.left = left + "px"
+			circle.style.top = top + "px"
+			circle.style.transition = "0.8s"
+		}
+		for (let i = 0; i < 16; i++) {
+			createCircle(getRandomIntInclusive(50,2400),getRandomIntInclusive(50, 1200))
+		}
+		let circle = document.querySelectorAll(".circle")
+		let start = function () {
+			for (let i = 0; i < 16; i++) {
+				circle[i].style.left = getRandomIntInclusive(50,2400) + "px"
+				circle[i].style.top = getRandomIntInclusive(50,1200) + "px"
+				circle[i].style.opacity = 0.5
+			}		
+		}
+		let red = function () {
+			for (let i = 0; i < 4; i++) {
+				cfRed = cfRed - 2
+				circle[i].style.width = cfRed + "px"
+				circle[i].style.height = cfRed + "px"
+			}
+		}
+		let blue = function () {
+			for (let i = 4; i < 8; i++) {
+				circle[i].style.background = "blue"
+			}
+		}
+		let yellow = function () {
+			for (let i = 8; i < 12; i++) {
+				cfYellow = cfYellow + 8
+				circle[i].style.background = "yellow"
+				circle[i].style.width = cfYellow + "px"
+				circle[i].style.height = cfYellow + "px"
+			}
+		}
+		let orange = function () {
+			for (let i = 12; i < 16; i++) {
+				cfOrange = cfOrange + 2
+				circle[i].style.background = "orange"
+				circle[i].style.width = cfOrange + "px"
+				circle[i].style.height = cfOrange + "px"
+			}
+		}
+		let end = function () {
+			if (count < 16) {
+				document.querySelector('.looser').style.display = "block"
+				for (let i = 0; i < 16; i++) {
+					circle[i].style.display = "none"
+				}
+			}
+		}
+		for (let i = 0; i < 16; i++) {
+			circle[i].onclick = function () {
+				circle[i].style.display = "none"
+				count = count + 1
+				document.querySelector('.count').innerHTML = count
+				if (count == 16) {
+					alert("Ты победил!")
+				}
+			}
+		}
+		setTimeout(start, 1000)
+		setTimeout(end, 10000)
+		setInterval(red, 1000)
+		setInterval(blue, 1000)
+		setInterval(yellow, 1000)
+		setInterval(orange, 1000)
+	</script>
+</html>
